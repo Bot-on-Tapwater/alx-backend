@@ -5,7 +5,7 @@ BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LIFOCache(BaseCaching):
-    """Implement BasicCache class"""
+    """Implement LIFOCache class"""
 
     recent_updated_key = None
 
