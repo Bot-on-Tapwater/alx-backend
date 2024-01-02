@@ -10,7 +10,6 @@ class BasicCache(BaseCaching):
     def __init__(self):
         """Constructor method"""
         super().__init__()
-        print(self.cache_data)
 
     def put(self, key, item):
         """append key item pair to dict"""
