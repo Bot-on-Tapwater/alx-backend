@@ -1,31 +1,52 @@
-#!/usr/bin/python3
-""" 100-lfu_cache """
-BaseCaching = __import__('base_caching').BaseCaching
+#!/usr/bin/env python3
+""" LRU Cache module """
+
+from base_caching import BaseCaching
 
 
 class LFUCache(BaseCaching):
-   def __init__(self):
-       super().__init__()
-       self.freq_list = LinkedList()
+    """ Defines an LRUCache class """
 
-   def put(self, key, item):
-       if key is None or item is None:
-           return
-       if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-           self.discard_item()
-       self.cache_data[key] = item
+    usage = {}
 
-   def get(self, key):
-       if key is None or key not in self.cache_data:
-           return None
-       else:
-           return self.cache_data[key]
+    def __init__(self):
+        """ Constructor """
+        super().__init__()
 
-   def discard_item(self):
-       min_freq_node = self.freq_list.head
-       min_freq_item = min_freq_node.data_list.head
-       self.freq_list.head.data_list.remove(min_freq_item)
-       del self.cache_data[min_freq_item.data_key]
-       if not self.freq_list.head.data_list:
-           self.freq_list.remove(self.freq_list.head)
-       print("DISCARD: " + str(min_freq_item.data_key))
+    def put(self, key, item):
+        """ Add an item in the cache """
+        if key is None or item is None:
+            pass
+        else:
+            if key in self.cache_data:
+                del self.cache_data[key]
+                self.cache_data[key] = item
+            else:
+                if len(self.cache_data) >= self.MAX_ITEMS:
+                    least_freq = min(list(self.usage.values()))
+                    min_keys = [key for key, value in list
+                                (self.usage.items()) if value == least_freq]
+                    for mykey in self.cache_data.keys():
+                        if mykey in min_keys:
+                            del self.cache_data[mykey]
+                            del self.usage[mykey]
+                            print(f"DISCARD: {mykey}")
+                            break
+                    self.cache_data[key] = item
+                else:
+                    self.cache_data[key] = item
+        if key in self.usage:
+            self.usage[key] += 1
+        else:
+            self.usage[key] = 0
+
+    def get(self, key):
+        """ Get an item by key """
+        if key is None or key not in self.cache_data:
+            return None
+        else:
+            if key in self.usage:
+                self.usage[key] += 1
+            else:
+                self.usage[key] = 0
+            return self.cache_data[key]
