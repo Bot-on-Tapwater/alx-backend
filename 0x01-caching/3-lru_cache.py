@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ LRU Cache module """
 
 from base_caching import BaseCaching
