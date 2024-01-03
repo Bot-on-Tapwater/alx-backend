@@ -14,6 +14,7 @@ class MRUCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
+        """append key item pair to dict"""
         if key is None or item is None:
             pass
         else:
@@ -33,6 +34,7 @@ class MRUCache(BaseCaching):
                     self.recently_used = key
 
     def get(self, key):
+        """return value in self.cache_data"""
         if key is None or key not in self.cache_data:
             return None
         else:
