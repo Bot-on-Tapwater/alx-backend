@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
-"""return in a list for those particular pagination parameters"""
-from typing import Tuple
+"""Implement simple pagination"""
+
 import csv
 import math
 from typing import List
-
-
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """return a tuple of size two containing
-    a start index and an end index"""
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-    index = (start_index, end_index)
-    return index
 
 
 class Server:
@@ -35,13 +26,15 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """Gets a page"""
-        dataset = self.dataset()
+        """Get page"""
         assert isinstance(page, int) and page > 0
         assert isinstance(page_size, int) and page_size > 0
         indexes = index_range(page, page_size)
-        start_index = indexes[0]
-        end_index = indexes[1]
-        if start_index >= len(dataset) or end_index < 0:
+        if (indexes[0] >= len(self.dataset()) or indexes[1] < 0):
             return []
-        return dataset[start_index:end_index]
+        return self.dataset()[indexes[0]:indexes[1]]
+
+
+def index_range(page, page_size):
+    """Return tuple containing start and end index"""
+    return ((page - 1) * page_size, (page * page_size))
