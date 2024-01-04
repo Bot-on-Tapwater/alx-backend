@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Implement simple pagination"""
+
 import csv
 import math
 from typing import List
@@ -23,4 +26,12 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-            pass
+        assert isinstance(page, int) and page > 0
+        assert isinstance(page_size, int) and page_size > 0
+        indexes = index_range(page, page_size)
+        return self.dataset()[indexes[0]:indexes[1]]
+
+
+def index_range(page, page_size):
+    """Return tuple containing start and end index"""
+    return ((page - 1) * page_size, (page * page_size))
